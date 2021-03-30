@@ -2,7 +2,7 @@
 
    Este es el repositorio donde se subirán los trabajos para el curso de Inteligencia Artificial (**CS261**).
 
-##Integrantes:
+## Integrantes:
 
 - Jose Miguel Guzman Chauca
 
