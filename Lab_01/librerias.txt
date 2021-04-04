@@ -1,3 +1,6 @@
 NO USAR ESTO AUN >:V
 
  sudo pacman -S tk //instalar tk xd
+ 
+ pip install networkx   
+ pip install matplotlib
