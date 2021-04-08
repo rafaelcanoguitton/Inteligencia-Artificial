@@ -64,6 +64,10 @@ if __name__ == '__main__':
     root = Tk()
     root.title("Laboratorio 01")
     root.geometry("500x300")
+    entry=tk.Entry(root)
+    entry.place(x=50,y=50)
+    entry2=tk.Entry(root)
+    entry2.place(x=50,y=75)
     ventana=Ventana(master=root)
-    #ventana.mainloop()
+    ventana.mainloop()
 
