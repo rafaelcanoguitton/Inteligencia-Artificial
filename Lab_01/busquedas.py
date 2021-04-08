@@ -21,8 +21,8 @@ class Ventana(tk.Frame):
         self.menu_tktext = Label(root, text=menu_msg)
         self.menu_tktext.pack()
 
-        self.boton1 = Button(root, text="Búsqueda ciega", command=lambda: flujo_principal(0))
-        self.boton2 = Button(root, text="Búsqueda heurística", command=lambda: flujo_principal(1))
+        self.boton1 = Button(root, text="Búsqueda ciega", command=lambda: flujo_principal(0,entry.get(),entry2.get()))
+        self.boton2 = Button(root, text="Búsqueda heurística", command=lambda: flujo_principal(1,entry.get(),entry2.get()))
         self.boton1.pack(side="left")
         self.boton2.pack(side="right")
 #Clase Grafo
@@ -55,19 +55,25 @@ class Graph():
 
 
 
-def flujo_principal(valor):
+def flujo_principal(valor,x,y):
     if(valor==0):
-        print("Se ejecuta búsqueda a ciegas")
+        print("Se ejecuta búsqueda a ciegas con x="+str(x)+" y y="+str(y))
     elif(valor==1):
-        print("Se ejecuta búsqueda heurística")
+        print("Se ejecuta búsqueda heurística con x="+str(x)+" y y="+str(y))
 if __name__ == '__main__':
     root = Tk()
     root.title("Laboratorio 01")
     root.geometry("500x300")
     entry=tk.Entry(root)
-    entry.place(x=50,y=50)
+    entry.insert(0,"Ingrese 'x'")
+    entry.place(x=250,y=50)
     entry2=tk.Entry(root)
-    entry2.place(x=50,y=75)
+    entry2.insert(0,"Ingrese 'y'")
+    entry2.place(x=250,y=75)
+    ingrese1=Text(root)
     ventana=Ventana(master=root)
+
+    entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
+    entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     ventana.mainloop()
 
