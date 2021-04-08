@@ -32,13 +32,8 @@ class Graph():
     nodos ={}
     cant_nodos= 0
     aristas=0
-    #search_label=0
     size_x=0
     size_y=0
-    
-    #helper=0
-    INICIO=0
-    FIN=0
 
     def constructor_grafo_aleatorio(self,n):
         for i in range(0,n):
@@ -72,7 +67,6 @@ if __name__ == '__main__':
     entry2.place(x=250,y=75)
     ingrese1=Text(root)
     ventana=Ventana(master=root)
-
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     ventana.mainloop()
