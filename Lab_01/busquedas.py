@@ -32,21 +32,37 @@ class Graph():
     nodos ={}
     cant_nodos= 0
     aristas=0
-    size_x=0
-    size_y=0
+    #search_label=0
+    size_x=100
+    size_y=100
+    
+    #helper=0
+    INICIO=0
+    FIN=0
 
-    def constructor_grafo_aleatorio(self,n):
-        for i in range(0,n):
-            temp_x=random.randint(0,self.size_x)
-            temp_y=random.randint(0,self.size_y)
-            self.nodos[i]=(temp_x,temp_y)
-        self.G.add_nodes_from(self.nodos.keys())
+    #def constructor_grafo_aleatorio(self,n):
+    #    for i in range(0,n):
+    #        temp_x=random.randint(0,self.size_x)
+    #        temp_y=random.randint(0,self.size_y)
+    #        self.nodos[i]=(temp_x,temp_y)
+    #        plt.scatter(self.nodos[i][0],self.nodos[i][1])
+
+    #    self.G.add_nodes_from(self.nodos.keys())
+    #    nx.draw(self.G, with_labels=True, font_weight='bold')
+    #    plt.show()
 
     def constructor_grafo_cuadricula(self,n):
         for i in range(0,n):
             for j in range(0,n):
                 self.nodos[j+i*n]=(j,i)
+        print (self.nodos)
+        
+        #for i in range(0,n):
+         #       plt.scatter(self.nodos[i][0],self.nodos[i][1])
+
         self.G.add_nodes_from(self.nodos.keys())
+        nx.draw(self.G, with_labels=True, font_weight='bold')
+        plt.show()
 
 
 
@@ -70,3 +86,6 @@ if __name__ == '__main__':
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     ventana.mainloop()
+    grafo=Graph()
+    #grafo.constructor_grafo_aleatorio(100)
+    grafo.constructor_grafo_cuadricula(2)
