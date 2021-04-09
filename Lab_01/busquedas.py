@@ -70,4 +70,3 @@ if __name__ == '__main__':
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     ventana.mainloop()
-
