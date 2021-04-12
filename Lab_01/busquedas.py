@@ -4,7 +4,7 @@ import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-
+#class
 #Clase Ventana
 #Sirve para tener una interfaz gráfica para la app
 class Ventana(tk.Frame):
