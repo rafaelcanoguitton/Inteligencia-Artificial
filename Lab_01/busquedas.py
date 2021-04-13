@@ -4,7 +4,8 @@ import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-#class
+import numpy as np
+
 #Clase Ventana
 #Sirve para tener una interfaz gráfica para la app
 class Ventana(tk.Frame):
@@ -25,52 +26,54 @@ class Ventana(tk.Frame):
         self.boton2 = Button(root, text="Búsqueda heurística", command=lambda: flujo_principal(1,entry.get(),entry2.get()))
         self.boton1.pack(side="left")
         self.boton2.pack(side="right")
+        
 #Clase Grafo
-
 class Graph():
-    G = nx.Graph()
-    nodos ={}
-    cant_nodos= 0
-    aristas=0
-    #search_label=0
+   G = nx.Graph()
+    coordinates ={}
     size_x=100
     size_y=100
-    
-    #helper=0
-    INICIO=0
-    FIN=0
+    table=np.zeros((size_x, size_y))
 
-    #def constructor_grafo_aleatorio(self,n):
-    #    for i in range(0,n):
-    #        temp_x=random.randint(0,self.size_x)
-    #        temp_y=random.randint(0,self.size_y)
-    #        self.nodos[i]=(temp_x,temp_y)
-    #        plt.scatter(self.nodos[i][0],self.nodos[i][1])
+    def constructor_grafo_aleatorio(self):
+        cont=0
+        for i in range(0,self.size_x):
+            for j in range(0,self.size_y):
+                self.G.add_node(cont)
+                self.table[i][j]=cont
+                self.G.nodes[cont]['coords']=(i,j)
+                self.coordinates[cont]=(i,j)
+                cont+=1
 
-    #    self.G.add_nodes_from(self.nodos.keys())
-    #    nx.draw(self.G, with_labels=True, font_weight='bold')
-    #    plt.show()
+    def neighbors(self, rowNumber, columnNumber, radius):
+        return [[self.table[i][j] if  i >= 0 and i < len(self.table) and j >= 0 and j < len(self.table[0]) else -1
+                 for j in range(columnNumber-1-radius, columnNumber+radius)]
+                    for i in range(rowNumber-1-radius, rowNumber+radius)]
 
-    def constructor_grafo_cuadricula(self,n):
-        for i in range(0,n):
-            for j in range(0,n):
-                self.nodos[j+i*n]=(j,i)
-        print (self.nodos)
-        
-        #for i in range(0,n):
-         #       plt.scatter(self.nodos[i][0],self.nodos[i][1])
+    def hacer_conexiones(self):
+        for k in list(self.G.nodes()):
+            neigh=np.zeros((3, 3))
+            neigh=self.neighbors(self.G.nodes[k]['coords'][0],self.G.nodes[k]['coords'][1],1)
 
-        self.G.add_nodes_from(self.nodos.keys())
-        nx.draw(self.G, with_labels=True, font_weight='bold')
+            if(neigh[1][1] != -1):
+                self.G.add_edge(k,neigh[1][1])
+
+            if(neigh[1][2] != -1):
+                self.G.add_edge(k,neigh[1][2])
+
+            if(neigh[2][1] != -1):
+                self.G.add_edge(k,neigh[2][1])
+
+    def print_grafo(self):
+        nx.draw_networkx(self.G,pos=self.coordinates)
         plt.show()
-
-
 
 def flujo_principal(valor,x,y):
     if(valor==0):
         print("Se ejecuta búsqueda a ciegas con x="+str(x)+" y y="+str(y))
     elif(valor==1):
         print("Se ejecuta búsqueda heurística con x="+str(x)+" y y="+str(y))
+        
 if __name__ == '__main__':
     root = Tk()
     root.title("Laboratorio 01")
@@ -86,6 +89,8 @@ if __name__ == '__main__':
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     ventana.mainloop()
+    
     grafo=Graph()
-    #grafo.constructor_grafo_aleatorio(100)
-    grafo.constructor_grafo_cuadricula(2)
+    grafo.constructor_grafo_aleatorio()
+    grafo.hacer_conexiones()
+    grafo.print_grafo()
