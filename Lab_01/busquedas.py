@@ -29,10 +29,10 @@ class Ventana(tk.Frame):
         
 #Clase Grafo
 class Graph():
-   G = nx.Graph()
+    G = nx.Graph()
     coordinates ={}
-    size_x=100
-    size_y=100
+    size_x=20
+    size_y=20
     table=np.zeros((size_x, size_y))
 
     def constructor_grafo_aleatorio(self):
@@ -63,6 +63,9 @@ class Graph():
 
             if(neigh[2][1] != -1):
                 self.G.add_edge(k,neigh[2][1])
+
+            if(neigh[1][2] != -1 and neigh[2][1] != -1):
+                self.G.add_edge(neigh[1][2],neigh[2][1])
 
     def print_grafo(self):
         nx.draw_networkx(self.G,pos=self.coordinates)
