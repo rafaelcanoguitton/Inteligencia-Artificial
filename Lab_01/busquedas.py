@@ -150,11 +150,10 @@ class Graph():
         while returner is not INICIO:
             returnPath.update({returner: came_from[returner]})
             #print(self.coordinates[returner])
-            self.G.add_edge(returner,came_from[returner],color='red',weight=6)
+            self.G.add_edge(returner,came_from[returner],color='blue',weight=6)
             returner=came_from[returner]
             pathsize=pathsize+1
         #print(self.coordinates[INICIO])
-
         
 
 
@@ -218,9 +217,41 @@ class Graph():
 
 def flujo_principal(valor,x,y):
     if(valor==0):
-        print("Se ejecuta búsqueda a ciegas con x="+str(x)+" y y="+str(y))
+        grafo=Graph(20,20)
+        nd_deleted=grafo.eliminar_nodos()
+        ax=int(x)
+        ay=int(y)
+        se_ejecuta=True
+        for i in nd_deleted:
+            if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        if se_ejecuta:
+            grafo.A_star(0,0,ax,ay)
+            grafo.print_grafo(0)
     elif(valor==1):
-        print("Se ejecuta búsqueda heurística con x="+str(x)+" y y="+str(y))
+        grafo=Graph(20,20)
+        nd_deleted=grafo.eliminar_nodos()
+        ax=int(x)
+        ay=int(y)
+        se_ejecuta=True
+        for i in nd_deleted:
+            if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        if se_ejecuta:
+            grafo.A_star(0,0,ax,ay)
+            grafo.print_grafo()
         
 if __name__ == '__main__':
     root = Tk()
@@ -236,6 +267,7 @@ if __name__ == '__main__':
     ventana=Ventana(master=root)
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
+<<<<<<< Updated upstream
     #ventana.mainloop()
     
     #coords_inicio=(3,16)
@@ -262,3 +294,6 @@ if __name__ == '__main__':
         grafo.A_star(0,0,9,6)
         grafo.print_grafo()
 
+=======
+    ventana.mainloop()
+>>>>>>> Stashed changes
