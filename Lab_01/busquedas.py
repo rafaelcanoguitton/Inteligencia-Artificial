@@ -212,11 +212,8 @@ class Graph():
                 color_map.append('green')    
 
         if path_find:
-            print ("Camino encontrado hill-climbing: ",path)
+            #print ("Camino encontrado hill-climbing: ",path)
             pos=nx.get_node_attributes(self.G,'coords')
-            #nx.draw(self.G,pos, node_color = color_map,with_labels=True)
-            #plt.show()
-
             plt.figure(num=None, figsize=(20, 20), dpi=80)
             plt.axis('off')
             nx.draw(self.G,pos,node_size=16, node_color = color_map)
@@ -266,7 +263,7 @@ class Graph():
             i = i + 1
         return len(returnPath)
 
-def flujo_principal(valor,x,y):
+def flujo_principal(valor,x,y,sx,sy,n):
     if(valor==1):
         grafo=Graph(20,20)
         nd_deleted=grafo.eliminar_nodos()
@@ -326,12 +323,13 @@ if __name__ == '__main__':
     entry5.insert(0,"Ingrese 'n'")
     entry5.place(x=0,y=65)
 
-    #ventana=Ventana(master=root)
-    #entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
-    #entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-    #entry3.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
-    #entry4.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-    #ventana.mainloop()
+    ventana=Ventana(master=root)
+    entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
+    entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
+    entry3.bind("<FocusIn>", lambda args: entry3.delete('0', 'end'))
+    entry4.bind("<FocusIn>", lambda args: entry4.delete('0', 'end'))
+    entry5.bind("<FocusIn>", lambda args: entry5.delete('0', 'end'))
+    ventana.mainloop()
     
     coords_inicio=(3,16)
     coords_llegada=(20,2)

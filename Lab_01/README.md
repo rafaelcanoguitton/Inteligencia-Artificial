@@ -6,6 +6,8 @@
 
 - Python 3.x.x
 
+- Instalar tkinter
+
 - Instalar todos los paquetes/librerías requeridos:
   
   - math
@@ -18,14 +20,12 @@
 
 - ~~Implementar construcción del grafo~~
 
-- Implementar búsqueda a ciegas
+- ~~Implementar búsqueda a ciegas~~
 
-- Implementar búsqueda heurística
+- ~~Implementar búsqueda heurística~~
 
-- Realizar pruebas
+- ~~Realizar pruebas~~
 
 ## Introducción
-
-//To_do_
 
 ## Resultados
