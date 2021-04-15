@@ -26,9 +26,9 @@ class Ventana(tk.Frame):
         self.menu_tktext = Label(root, text=menu_msg)
         self.menu_tktext.pack()
 
-        self.boton1 = Button(root, text="Búsqueda ciega", command=lambda: flujo_principal(0,entry.get(),entry2.get()))
-        self.boton2 = Button(root, text="Búsqueda heurística(A*)", command=lambda: flujo_principal(1,entry.get(),entry2.get()))
-        self.boton3 = Button(root, text="Búsqueda heurística(Hill Climbing", command=lambda: flujo_principal(2,entry.get(),entry2.get()))
+        self.boton1 = Button(root, text="Búsqueda ciega", command=lambda: flujo_principal(0,entry.get(),entry2.get(),entry3.get(),entry4.get(),entry5.get()))
+        self.boton2 = Button(root, text="Búsqueda heurística(A*)", command=lambda: flujo_principal(1,entry.get(),entry2.get(),entry3.get(),entry4.get(),entry5.get()))
+        self.boton3 = Button(root, text="Búsqueda heurística(Hill Climbing", command=lambda: flujo_principal(2,entry.get(),entry2.get(),entry3.get(),entry4.get(),entry5.get()))
         self.boton1.pack(side="left")
         self.boton3.pack(side="left")
         self.boton2.pack(side="right")
@@ -256,9 +256,9 @@ class Graph():
             returner = returnPath[i + 1]
             i = i + 1
         return len(returnPath)
-def flujo_principal(valor,x,y):
+def flujo_principal(valor,x,y,sx,sy,n):
     if(valor==1):
-        grafo=Graph(20,20)
+        grafo=Graph(int(n),int(n))
         nd_deleted=grafo.eliminar_nodos()
         ax=int(x)
         ay=int(y)
@@ -267,16 +267,25 @@ def flujo_principal(valor,x,y):
             if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
                 window = Tk()
                 window.title("Error")
-                lbl=Label(window,text="El nodo fue eliminado por favor ecoja otro :((")
+                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        for i in nd_deleted:
+            if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :((")
                 lbl.grid(column=0,row=0)
                 window.mainloop()
                 se_ejecuta=False
                 break
         if se_ejecuta:
-            grafo.A_star(0,0,ax,ay)
+            grafo.A_star(int(sx),int(sy),ax,ay)
             grafo.print_grafo()
     elif(valor==0):
-        grafo=Graph(20,20)
+        grafo=Graph(int(n),int(n))
         nd_deleted=grafo.eliminar_nodos()
         ax=int(x)
         ay=int(y)
@@ -285,14 +294,56 @@ def flujo_principal(valor,x,y):
             if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
                 window = Tk()
                 window.title("Error")
-                lbl=Label(window,text="El nodo fue eliminado por favor ecoja otro :((")
+                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        for i in nd_deleted:
+            if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :((")
                 lbl.grid(column=0,row=0)
                 window.mainloop()
                 se_ejecuta=False
                 break
         if se_ejecuta:
-            grafo.DFS(0,0,ax,ay)
+            grafo.DFS(int(sx),int(sy),ax,ay)
             grafo.print_grafo()
+    elif(valor==2):
+        grafo=Graph(int(n),int(n))
+        nd_deleted=grafo.eliminar_nodos()
+        ax=int(x)
+        ay=int(y)
+        se_ejecuta=True
+        for i in nd_deleted:
+            if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        for i in nd_deleted:
+            if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        if se_ejecuta:
+            coords_inicio=(3,16)
+            coords_llegada=(15,2)
+            ini=coords_inicio[0]*100+coords_inicio[1]
+            objetivo=coords_llegada[0]*100+coords_llegada[1]
+            grafo=Graph(100,100)
+            grafo.eliminar_nodos()
+            grafo.hill_climbing(10000,ini,objetivo)
+            #grafo.print_grafo()
         
 if __name__ == '__main__':
     root = Tk()
@@ -319,8 +370,9 @@ if __name__ == '__main__':
     ventana=Ventana(master=root)
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-    entry3.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
-    entry4.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
+    entry3.bind("<FocusIn>", lambda args: entry3.delete('0', 'end'))
+    entry4.bind("<FocusIn>", lambda args: entry4.delete('0', 'end'))
+    entry5.bind("<FocusIn>", lambda args: entry5.delete('0', 'end'))
     ventana.mainloop()
     
     #coords_inicio=(3,16)

@@ -18,11 +18,11 @@
 
 - ~~Implementar construcción del grafo~~
 
-- Implementar búsqueda a ciegas
+- ~~Implementar búsqueda a ciegas~~
 
-- Implementar búsqueda heurística
+- ~~Implementar búsqueda heurística~~
 
-- Realizar pruebas
+- ~~Realizar pruebas~~
 
 ## Introducción
 
