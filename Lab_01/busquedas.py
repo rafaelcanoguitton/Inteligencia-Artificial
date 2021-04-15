@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib import pylab
 import random
 import numpy as np
-
+from queue import PriorityQueue 
+import math
 #Clase Ventana
 #Sirve para tener una interfaz gráfica para la app
 class Ventana(tk.Frame):
@@ -62,35 +63,91 @@ class Graph():
             neigh=self.neighbors(self.G.nodes[k]['coords'][0],self.G.nodes[k]['coords'][1],1)
 
             if(neigh[1][1] != -1):
-                self.G.add_edge(k,neigh[1][1])
+                self.G.add_edge(k,neigh[1][1],color='green')
 
             if(neigh[1][2] != -1):
-                self.G.add_edge(k,neigh[1][2])
+                self.G.add_edge(k,neigh[1][2],color='green')
 
             if(neigh[2][1] != -1):
-                self.G.add_edge(k,neigh[2][1])
+                self.G.add_edge(k,neigh[2][1],color='green')
 
             if(neigh[1][2] != -1 and neigh[2][1] != -1):
-                self.G.add_edge(neigh[1][2],neigh[2][1])
+                self.G.add_edge(neigh[1][2],neigh[2][1],color='green')
 
     def print_grafo(self):
         plt.figure(num=None, figsize=(20, 20), dpi=80)
         plt.axis('off')
-        nx.draw_networkx(self.G,pos=self.coordinates,with_labels=False,node_size=16)
+        nx.draw_networkx_nodes(self.G,pos=self.coordinates,node_size=16)
+        edges=self.G.edges()
+        colors=[self.G[u][v]['color']for u,v in edges]
+        nx.draw_networkx_edges(self.G,pos=self.coordinates,edge_color=colors)
+        plt.tight_layout()
         plt.show()
         
     def eliminar_nodos(self):
-        #self.G.remove_node(24)
         cant_nodos=self.size_x*self.size_y
-        #self.G.remove_node(random.randint(0,cant_nodos-2))
+        nodos_borrados={}
         for i in range(int(cant_nodos*0.2)):
             while(True):
                 try:
-                    self.G.remove_node(random.randint(0,cant_nodos-1))
+                    index=random.randint(0,cant_nodos-1)
+                    self.G.remove_node(index)
+                    nodos_borrados[i]=self.coordinates[index]
                 except :
                     pass
                 else:
                     break
+        return nodos_borrados
+    
+    def heuristic(self, a, b):
+        aX = (a)[0]
+        aY = (a)[1]
+        bX = (b)[0]
+        bY = (b)[1]
+        return math.sqrt((bX - aX) ** 2 + (bY - aY) ** 2)
+
+    def A_star(self, StartX, StartY, EndX, EndY):
+        #Hallar nodo en si
+        INICIO=0
+        FIN=0
+        for i in self.coordinates:
+            if(self.coordinates[i][0]==EndX and self.coordinates[i][1]==EndY):
+                FIN=i
+                break
+        for i in self.coordinates:
+            if(self.coordinates[i][0]==StartX and self.coordinates[i][1]==StartY):
+                INICIO=i
+                break
+        Pawn=PriorityQueue()
+        Pawn.put(INICIO,0)
+        came_from={}
+        score={}
+        came_from[INICIO]=None
+        score[INICIO]=0
+        while not Pawn.empty():
+            current=Pawn.get()
+            if current==FIN:
+                break
+            for Next in self.G.neighbors(current):
+                tentative_score=score[current]+self.heuristic(self.coordinates[current],self.coordinates[FIN])
+                if Next not in score or tentative_score<score[Next]:
+                    score[Next]=tentative_score
+                    fscore=tentative_score+self.heuristic(self.coordinates[FIN],self.coordinates[Next])
+                    Pawn.put(Next,fscore)
+                    came_from[Next]=current
+        returnPath={}
+        returner=FIN
+        pathsize=0
+        while returner is not INICIO:
+            returnPath.update({returner: came_from[returner]})
+            #print(self.coordinates[returner])
+            self.G.add_edge(returner,came_from[returner],color='red',weight=6)
+            returner=came_from[returner]
+            pathsize=pathsize+1
+        #print(self.coordinates[INICIO])
+
+        
+
 
 def flujo_principal(valor,x,y):
     if(valor==0):
@@ -113,7 +170,16 @@ if __name__ == '__main__':
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     #ventana.mainloop()
-    
-    grafo=Graph(50,50)
-    grafo.eliminar_nodos()
-    grafo.print_grafo()
+    grafo=Graph(20,20)
+    nd_deleted=grafo.eliminar_nodos()
+    ax=1
+    ay=3
+    se_ejecuta=True
+    for i in nd_deleted:
+        if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
+            print('Este nodo ya no existe uwu')
+            se_ejecuta=False
+            break
+    if se_ejecuta:
+        grafo.A_star(0,0,9,6)
+        grafo.print_grafo()
