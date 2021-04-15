@@ -157,9 +157,9 @@ class Graph():
             returner=came_from[returner]
             pathsize=pathsize+1
         #print(self.coordinates[INICIO])
-        
-
-
+    
+##################################################################################################################################################
+#Heuristic
     def hill_climbing(self, n_nodos, nodo_ini, nodo_objetivo):
         distancia_nodo_objetivo={}
 
@@ -214,8 +214,17 @@ class Graph():
         if path_find:
             print ("Camino encontrado hill-climbing: ",path)
             pos=nx.get_node_attributes(self.G,'coords')
-            nx.draw(self.G,pos, node_color = color_map,with_labels=True)
+            #nx.draw(self.G,pos, node_color = color_map,with_labels=True)
+            #plt.show()
+
+            plt.figure(num=None, figsize=(20, 20), dpi=80)
+            plt.axis('off')
+            nx.draw(self.G,pos,node_size=16, node_color = color_map)
+            plt.tight_layout()
             plt.show()
+
+###################################################################################################################################################
+#Ciega
     def DFS(self,StartX, StartY, EndX, EndY):
         INICIO=0
         FIN=0
@@ -256,6 +265,7 @@ class Graph():
             returner = returnPath[i + 1]
             i = i + 1
         return len(returnPath)
+
 def flujo_principal(valor,x,y):
     if(valor==1):
         grafo=Graph(20,20)
@@ -316,18 +326,18 @@ if __name__ == '__main__':
     entry5.insert(0,"Ingrese 'n'")
     entry5.place(x=0,y=65)
 
-    ventana=Ventana(master=root)
-    entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
-    entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-    entry3.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
-    entry4.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-    ventana.mainloop()
+    #ventana=Ventana(master=root)
+    #entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
+    #entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
+    #entry3.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
+    #entry4.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
+    #ventana.mainloop()
     
-    #coords_inicio=(3,16)
-    #coords_llegada=(15,2)
-    #ini=coords_inicio[0]*100+coords_inicio[1]
-    #objetivo=coords_llegada[0]*100+coords_llegada[1]
-    #grafo=Graph(100,100)
+    coords_inicio=(3,16)
+    coords_llegada=(20,2)
+    ini=coords_inicio[0]*100+coords_inicio[1]
+    objetivo=coords_llegada[0]*100+coords_llegada[1]
+    grafo=Graph(100,100)
     #grafo.eliminar_nodos()
     #grafo.print_grafo()
-    #grafo.hill_climbing(10000,ini,objetivo)
+    grafo.hill_climbing(10000,ini,objetivo)
