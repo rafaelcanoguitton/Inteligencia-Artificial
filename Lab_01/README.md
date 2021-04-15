@@ -6,6 +6,8 @@
 
 - Python 3.x.x
 
+- Instalar tkinter
+
 - Instalar todos los paquetes/librerías requeridos:
   
   - math
@@ -25,7 +27,5 @@
 - ~~Realizar pruebas~~
 
 ## Introducción
-
-//To_do_
 
 ## Resultados
