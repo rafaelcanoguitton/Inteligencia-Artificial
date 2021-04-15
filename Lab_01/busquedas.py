@@ -5,6 +5,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import pylab
 import random
+import math
 import numpy as np
 
 #Clase Ventana
@@ -47,6 +48,7 @@ class Graph():
                 self.G.add_node(cont)
                 self.table[i][j]=cont
                 self.G.nodes[cont]['coords']=(i,j)
+                self.G.nodes[cont]['path']=False
                 self.coordinates[cont]=(i,j)
                 cont+=1
         self.hacer_conexiones()
@@ -55,6 +57,13 @@ class Graph():
         return [[self.table[i][j] if  i >= 0 and i < len(self.table) and j >= 0 and j < len(self.table[0]) else -1
                  for j in range(columnNumber-1-radius, columnNumber+radius)]
                     for i in range(rowNumber-1-radius, rowNumber+radius)]
+
+    
+    def get_key(self,val,dist_neighbors): 
+        for key, value in dist_neighbors.items(): 
+             if val == value: 
+                 return key 
+        return "key doesn't exist"
 
     def hacer_conexiones(self):
         for k in list(self.G.nodes()):
@@ -92,6 +101,64 @@ class Graph():
                 else:
                     break
 
+    def hill_climbing(self, n_nodos, nodo_ini, nodo_objetivo):
+        distancia_nodo_objetivo={}
+
+        for i in range(0,n_nodos):
+            if i != n_nodos:
+                distancia_nodo_objetivo[i]=(round(math.sqrt(((self.G.nodes[i]['coords'][1]-self.G.nodes[nodo_objetivo]['coords'][1])**2)+((self.G.nodes[nodo_objetivo]['coords'][0]-self.G.nodes[i]['coords'][0])**2)),2))
+
+        nodo_inicial = nodo_ini
+        nodo_final = nodo_objetivo
+        nodo_cam = self.G.nodes[nodo_inicial]
+        cont=nodo_inicial
+        i = 0
+        path = []
+        path.append(nodo_inicial)
+
+        while cont != nodo_final:
+            dist_neighbors = {}
+            menor = 0
+            key = 0
+            hijo = 0
+            for edges in self.G.edges(cont):
+                hijo = edges[1]
+                if (self.G.nodes[hijo]['path'] != True):
+                    dist_neighbors[hijo]=distancia_nodo_objetivo[hijo]
+                    if (hijo == nodo_final or distancia_nodo_objetivo[hijo] == 0 ):
+                        menor = distancia_nodo_objetivo[hijo]
+                        break
+                    if menor == 0:
+                        menor = distancia_nodo_objetivo[hijo]
+                    if distancia_nodo_objetivo[hijo] < menor and distancia_nodo_objetivo[hijo] != 0 and nodo_cam['path']!= True:
+                        menor = distancia_nodo_objetivo[hijo]
+            key = self.get_key(menor,dist_neighbors)
+            if key == "key doesn't exist":
+                print ("Camino no encontrado")
+                path_find = False
+                break
+            else:
+                path_find = True
+                path.append(key)
+                nodo_cam['path']=True
+                nodo_cam = self.G.nodes[key]
+                cont=key
+                self.G.nodes[nodo_inicial]['path'] = True
+
+        self.G.nodes[nodo_final]['path'] = True
+        color_map = []
+        for i in range (0,n_nodos):
+            if self.G.nodes[i]['path'] == True :
+                color_map.append('red')
+            else:
+                color_map.append('green')    
+
+        if path_find:
+            print ("Camino encontrado hill-climbing: ",path)
+            pos=nx.get_node_attributes(self.G,'coords')
+            nx.draw(self.G,pos, node_color = color_map,with_labels=True)
+            plt.show()
+
 def flujo_principal(valor,x,y):
     if(valor==0):
         print("Se ejecuta búsqueda a ciegas con x="+str(x)+" y y="+str(y))
@@ -114,6 +181,12 @@ if __name__ == '__main__':
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     #ventana.mainloop()
     
-    grafo=Graph(50,50)
-    grafo.eliminar_nodos()
-    grafo.print_grafo()
+    coords_inicio=(3,16)
+    coords_llegada=(15,2)
+    ini=coords_inicio[0]*100+coords_inicio[1]
+    objetivo=coords_llegada[0]*100+coords_llegada[1]
+    
+    grafo=Graph(100,100)
+    #grafo.eliminar_nodos()
+    #grafo.print_grafo()
+    grafo.hill_climbing(10000,ini,objetivo)
