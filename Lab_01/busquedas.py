@@ -31,13 +31,17 @@ class Ventana(tk.Frame):
 #Clase Grafo
 class Graph():
     G = nx.Graph()
-    coordinates ={}
-    size_x=100
-    size_y=100
+    coordinates ={} #para impresion
+    size_x=0
+    size_y=0
     table=np.zeros((size_x, size_y))
 
-    def constructor_grafo_aleatorio(self):
+    def __init__(self, x, y):
         cont=0
+        self.size_x=x
+        self.size_y=y
+        self.table=np.zeros((self.size_x, self.size_y))
+
         for i in range(0,self.size_x):
             for j in range(0,self.size_y):
                 self.G.add_node(cont)
@@ -45,6 +49,7 @@ class Graph():
                 self.G.nodes[cont]['coords']=(i,j)
                 self.coordinates[cont]=(i,j)
                 cont+=1
+        self.hacer_conexiones()
 
     def neighbors(self, rowNumber, columnNumber, radius):
         return [[self.table[i][j] if  i >= 0 and i < len(self.table) and j >= 0 and j < len(self.table[0]) else -1
@@ -69,10 +74,6 @@ class Graph():
                 self.G.add_edge(neigh[1][2],neigh[2][1])
 
     def print_grafo(self):
-        #nx.draw(self.G,pos=self.coordinates)
-        # nx.draw(self.G, node_color='#A0CBE2',edge_color='#BB0000',width=2,edge_cmap=plt.cm.Blues,with_labels=False)
-        # plt.show()
-        # plt.figure(figsize=(self.size_x,self.size_y))
         plt.figure(num=None, figsize=(20, 20), dpi=80)
         plt.axis('off')
         nx.draw_networkx(self.G,pos=self.coordinates,with_labels=False,node_size=16)
@@ -90,8 +91,6 @@ class Graph():
                     pass
                 else:
                     break
-
-
 
 def flujo_principal(valor,x,y):
     if(valor==0):
@@ -115,8 +114,6 @@ if __name__ == '__main__':
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
     #ventana.mainloop()
     
-    grafo=Graph()
-    grafo.constructor_grafo_aleatorio()
-    grafo.hacer_conexiones()
-    #grafo.eliminar_nodos()
+    grafo=Graph(50,50)
+    grafo.eliminar_nodos()
     grafo.print_grafo()
