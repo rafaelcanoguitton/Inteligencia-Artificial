@@ -77,6 +77,20 @@ class Graph():
         plt.axis('off')
         nx.draw_networkx(self.G,pos=self.coordinates,with_labels=False,node_size=16)
         plt.show()
+    def eliminar_nodos(self):
+        #self.G.remove_node(24)
+        cant_nodos=self.size_x*self.size_y
+        #self.G.remove_node(random.randint(0,cant_nodos-2))
+        for i in range(int(cant_nodos*0.2)):
+            while(True):
+                try:
+                    self.G.remove_node(random.randint(0,cant_nodos-1))
+                except :
+                    pass
+                else:
+                    break
+
+
 
 def flujo_principal(valor,x,y):
     if(valor==0):
@@ -103,4 +117,5 @@ if __name__ == '__main__':
     grafo=Graph()
     grafo.constructor_grafo_aleatorio()
     grafo.hacer_conexiones()
+    grafo.eliminar_nodos()
     grafo.print_grafo()
