@@ -9,6 +9,7 @@ import math
 import numpy as np
 from queue import PriorityQueue 
 import math
+
 #Clase Ventana
 #Sirve para tener una interfaz gráfica para la app
 class Ventana(tk.Frame):
@@ -26,8 +27,10 @@ class Ventana(tk.Frame):
         self.menu_tktext.pack()
 
         self.boton1 = Button(root, text="Búsqueda ciega", command=lambda: flujo_principal(0,entry.get(),entry2.get()))
-        self.boton2 = Button(root, text="Búsqueda heurística", command=lambda: flujo_principal(1,entry.get(),entry2.get()))
+        self.boton2 = Button(root, text="Búsqueda heurística(A*)", command=lambda: flujo_principal(1,entry.get(),entry2.get()))
+        self.boton3 = Button(root, text="Búsqueda heurística(Hill Climbing", command=lambda: flujo_principal(2,entry.get(),entry2.get()))
         self.boton1.pack(side="left")
+        self.boton3.pack(side="left")
         self.boton2.pack(side="right")
         
 #Clase Grafo
@@ -150,7 +153,7 @@ class Graph():
         while returner is not INICIO:
             returnPath.update({returner: came_from[returner]})
             #print(self.coordinates[returner])
-            self.G.add_edge(returner,came_from[returner],color='blue',weight=6)
+            self.G.add_edge(returner,came_from[returner],color='red',weight=6)
             returner=came_from[returner]
             pathsize=pathsize+1
         #print(self.coordinates[INICIO])
@@ -171,7 +174,6 @@ class Graph():
         i = 0
         path = []
         path.append(nodo_inicial)
-
         while cont != nodo_final:
             dist_neighbors = {}
             menor = 0
@@ -214,27 +216,48 @@ class Graph():
             pos=nx.get_node_attributes(self.G,'coords')
             nx.draw(self.G,pos, node_color = color_map,with_labels=True)
             plt.show()
-
-def flujo_principal(valor,x,y):
-    if(valor==0):
-        grafo=Graph(20,20)
-        nd_deleted=grafo.eliminar_nodos()
-        ax=int(x)
-        ay=int(y)
-        se_ejecuta=True
-        for i in nd_deleted:
-            if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
-                window = Tk()
-                window.title("Error")
-                lbl=Label(window,text="El nodo fue eliminado por favor ecoja otro :((")
-                lbl.grid(column=0,row=0)
-                window.mainloop()
-                se_ejecuta=False
+    def DFS(self,StartX, StartY, EndX, EndY):
+        INICIO=0
+        FIN=0
+        for i in self.coordinates:
+            if(self.coordinates[i][0]==EndX and self.coordinates[i][1]==EndY):
+                FIN=i
                 break
-        if se_ejecuta:
-            grafo.A_star(0,0,ax,ay)
-            grafo.print_grafo(0)
-    elif(valor==1):
+        for i in self.coordinates:
+            if(self.coordinates[i][0]==StartX and self.coordinates[i][1]==StartY):
+                INICIO=i
+                break
+        path = []
+        nodossinhijos = []
+        path.append(INICIO)
+        nodossinhijos.append(INICIO)
+        current = path[0]
+        while current != FIN:
+            vecinos = []
+            for i in self.G.neighbors(current):
+                if i not in path and i not in nodossinhijos:
+                    vecinos.append(i)
+            if len(vecinos) > 0:
+                current = vecinos[0]
+                path.append(current)
+            else:
+                nodossinhijos.append(current)
+                path.pop(-1)
+
+        returnPath = path
+        returnPath.reverse()
+        returner = returnPath[0]
+        i = 0
+        while i < len(returnPath) - 1:
+            if i == 0 or i == len(returnPath) - 2:
+                self.G.add_edge(returner, returnPath[i + 1], color='blue')
+            else:
+                self.G.add_edge(returner, returnPath[i + 1], color='red')
+            returner = returnPath[i + 1]
+            i = i + 1
+        return len(returnPath)
+def flujo_principal(valor,x,y):
+    if(valor==1):
         grafo=Graph(20,20)
         nd_deleted=grafo.eliminar_nodos()
         ax=int(x)
@@ -252,48 +275,59 @@ def flujo_principal(valor,x,y):
         if se_ejecuta:
             grafo.A_star(0,0,ax,ay)
             grafo.print_grafo()
+    elif(valor==0):
+        grafo=Graph(20,20)
+        nd_deleted=grafo.eliminar_nodos()
+        ax=int(x)
+        ay=int(y)
+        se_ejecuta=True
+        for i in nd_deleted:
+            if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
+                window = Tk()
+                window.title("Error")
+                lbl=Label(window,text="El nodo fue eliminado por favor ecoja otro :((")
+                lbl.grid(column=0,row=0)
+                window.mainloop()
+                se_ejecuta=False
+                break
+        if se_ejecuta:
+            grafo.DFS(0,0,ax,ay)
+            grafo.print_grafo()
         
 if __name__ == '__main__':
     root = Tk()
     root.title("Laboratorio 01")
-    root.geometry("500x300")
+    root.geometry("550x300")
     entry=tk.Entry(root)
-    entry.insert(0,"Ingrese 'x'")
-    entry.place(x=250,y=50)
+    entry.insert(0,"Ingrese 'xFIN'")
+    entry.place(x=350,y=50)
     entry2=tk.Entry(root)
-    entry2.insert(0,"Ingrese 'y'")
-    entry2.place(x=250,y=75)
-    ingrese1=Text(root)
+    entry2.insert(0,"Ingrese 'yFIN'")
+    entry2.place(x=350,y=75)
+    
+    entry3=tk.Entry(root)
+    entry3.insert(0,"Ingrese 'xINICIO'")
+    entry3.place(x=180,y=50)
+    entry4=tk.Entry(root)
+    entry4.insert(0,"Ingrese 'yINICIO'")
+    entry4.place(x=180,y=75)
+
+    entry5=tk.Entry(root)
+    entry5.insert(0,"Ingrese 'n'")
+    entry5.place(x=0,y=65)
+
     ventana=Ventana(master=root)
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-<<<<<<< Updated upstream
-    #ventana.mainloop()
+    entry3.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
+    entry4.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
+    ventana.mainloop()
     
     #coords_inicio=(3,16)
     #coords_llegada=(15,2)
     #ini=coords_inicio[0]*100+coords_inicio[1]
     #objetivo=coords_llegada[0]*100+coords_llegada[1]
-    
     #grafo=Graph(100,100)
     #grafo.eliminar_nodos()
     #grafo.print_grafo()
     #grafo.hill_climbing(10000,ini,objetivo)
-
-    grafo=Graph(20,20)
-    nd_deleted=grafo.eliminar_nodos()
-    ax=1
-    ay=3
-    se_ejecuta=True
-    for i in nd_deleted:
-        if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
-            print('Este nodo ya no existe uwu')
-            se_ejecuta=False
-            break
-    if se_ejecuta:
-        grafo.A_star(0,0,9,6)
-        grafo.print_grafo()
-
-=======
-    ventana.mainloop()
->>>>>>> Stashed changes
