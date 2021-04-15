@@ -217,6 +217,9 @@ class Graph():
             plt.figure(num=None, figsize=(20, 20), dpi=80)
             plt.axis('off')
             nx.draw(self.G,pos,node_size=16, node_color = color_map)
+            edges=self.G.edges()
+            colors=[self.G[u][v]['color']for u,v in edges]
+            nx.draw_networkx_edges(self.G,pos=self.coordinates,edge_color=colors)
             plt.tight_layout()
             plt.show()
 
@@ -347,8 +350,8 @@ def flujo_principal(valor,x,y,sx,sy,n):
             coords_llegada=(ax,ay)
             ini=coords_inicio[0]*int(n)+coords_inicio[1]
             objetivo=coords_llegada[0]*int(n)+coords_llegada[1]
-
-            grafo.hill_climbing(int(n)*int(n),ini,objetivo)
+            aux=int(n)*int(n)
+            grafo.hill_climbing(aux,ini,objetivo)
         
 if __name__ == '__main__':
     root = Tk()
