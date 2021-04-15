@@ -3,6 +3,7 @@ from tkinter import *
 import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib import pylab
 import random
 import numpy as np
 
@@ -31,8 +32,8 @@ class Ventana(tk.Frame):
 class Graph():
     G = nx.Graph()
     coordinates ={}
-    size_x=20
-    size_y=20
+    size_x=100
+    size_y=100
     table=np.zeros((size_x, size_y))
 
     def constructor_grafo_aleatorio(self):
@@ -68,7 +69,13 @@ class Graph():
                 self.G.add_edge(neigh[1][2],neigh[2][1])
 
     def print_grafo(self):
-        nx.draw_networkx(self.G,pos=self.coordinates)
+        #nx.draw(self.G,pos=self.coordinates)
+        # nx.draw(self.G, node_color='#A0CBE2',edge_color='#BB0000',width=2,edge_cmap=plt.cm.Blues,with_labels=False)
+        # plt.show()
+        # plt.figure(figsize=(self.size_x,self.size_y))
+        plt.figure(num=None, figsize=(20, 20), dpi=80)
+        plt.axis('off')
+        nx.draw_networkx(self.G,pos=self.coordinates,with_labels=False,node_size=16)
         plt.show()
 
 def flujo_principal(valor,x,y):
@@ -91,7 +98,7 @@ if __name__ == '__main__':
     ventana=Ventana(master=root)
     entry.bind("<FocusIn>", lambda args: entry.delete('0', 'end'))
     entry2.bind("<FocusIn>", lambda args: entry2.delete('0', 'end'))
-    ventana.mainloop()
+    #ventana.mainloop()
     
     grafo=Graph()
     grafo.constructor_grafo_aleatorio()
