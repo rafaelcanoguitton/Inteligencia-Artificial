@@ -1,5 +1,7 @@
 # Laboratorio búsquedas a ciegas y heurísticas
+
 [![Python Versions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue)](https://www.python.org/downloads/release/python-382/)
+
 ## Requerimientos e instalación
 
 - Python 3.x.x
@@ -12,13 +14,13 @@
 
 ## Lista de cosas por hacer
 
-- Implementar la clase grafo
+- ~~Implementar la clase grafo~~
 
-- Implementar construcción del grafo
+- ~~Implementar construcción del grafo~~
 
-- Implementar búsqueda/s ciega/s
+- Implementar búsqueda a ciegas
 
-- Implementar búsqueda/s heurística/s
+- Implementar búsqueda heurística
 
 - Realizar pruebas
 
@@ -27,7 +29,3 @@
 //To_do_
 
 ## Resultados
-
-
-
-
