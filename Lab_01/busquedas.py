@@ -274,7 +274,7 @@ def flujo_principal(valor,x,y,sx,sy,n):
             if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
                 window = Tk()
                 window.title("Error")
-                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :((")
+                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :( ")
                 lbl.grid(column=0,row=0)
                 window.mainloop()
                 se_ejecuta=False
@@ -283,7 +283,7 @@ def flujo_principal(valor,x,y,sx,sy,n):
             if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
                 window = Tk()
                 window.title("Error")
-                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :((")
+                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :( ")
                 lbl.grid(column=0,row=0)
                 window.mainloop()
                 se_ejecuta=False
@@ -301,7 +301,7 @@ def flujo_principal(valor,x,y,sx,sy,n):
             if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
                 window = Tk()
                 window.title("Error")
-                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :((")
+                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :( ")
                 lbl.grid(column=0,row=0)
                 window.mainloop()
                 se_ejecuta=False
@@ -310,7 +310,7 @@ def flujo_principal(valor,x,y,sx,sy,n):
             if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
                 window = Tk()
                 window.title("Error")
-                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :((")
+                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :( ")
                 lbl.grid(column=0,row=0)
                 window.mainloop()
                 se_ejecuta=False
@@ -320,37 +320,35 @@ def flujo_principal(valor,x,y,sx,sy,n):
             grafo.print_grafo()
     elif(valor==2):
         grafo=Graph(int(n),int(n))
-        nd_deleted=grafo.eliminar_nodos()
+        #nd_deleted=grafo.eliminar_nodos()
         ax=int(x)
         ay=int(y)
         se_ejecuta=True
-        for i in nd_deleted:
-            if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
-                window = Tk()
-                window.title("Error")
-                lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :((")
-                lbl.grid(column=0,row=0)
-                window.mainloop()
-                se_ejecuta=False
-                break
-        for i in nd_deleted:
-            if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
-                window = Tk()
-                window.title("Error")
-                lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :((")
-                lbl.grid(column=0,row=0)
-                window.mainloop()
-                se_ejecuta=False
-                break
+        #for i in nd_deleted:
+        #    if nd_deleted[i][0]==ax and nd_deleted[i][1]==ay:
+        #        window = Tk()
+        #        window.title("Error")
+        #        lbl=Label(window,text="El nodo final fue eliminado por favor ecoja otro :( ")
+        #        lbl.grid(column=0,row=0)
+        #        window.mainloop()
+        #        se_ejecuta=False
+        #        break
+        #for i in nd_deleted:
+        #    if nd_deleted[i][0]==int(sx) and nd_deleted[i][1]==int(sy):
+        #        window = Tk()
+        #        window.title("Error")
+        #        lbl=Label(window,text="El nodo inicial fue eliminado por favor ecoja otro :( ")
+        #        lbl.grid(column=0,row=0)
+        #        window.mainloop()
+        #        se_ejecuta=False
+        #        break
         if se_ejecuta:
-            coords_inicio=(3,16)
-            coords_llegada=(15,2)
-            ini=coords_inicio[0]*100+coords_inicio[1]
-            objetivo=coords_llegada[0]*100+coords_llegada[1]
-            grafo=Graph(100,100)
-            grafo.eliminar_nodos()
-            grafo.hill_climbing(10000,ini,objetivo)
-            #grafo.print_grafo()
+            coords_inicio=(int(sx),int(sy))
+            coords_llegada=(ax,ay)
+            ini=coords_inicio[0]*int(n)+coords_inicio[1]
+            objetivo=coords_llegada[0]*int(n)+coords_llegada[1]
+
+            grafo.hill_climbing(int(n)*int(n),ini,objetivo)
         
 if __name__ == '__main__':
     root = Tk()
@@ -382,11 +380,3 @@ if __name__ == '__main__':
     entry5.bind("<FocusIn>", lambda args: entry5.delete('0', 'end'))
     ventana.mainloop()
     
-    #coords_inicio=(3,16)
-    #coords_llegada=(20,2)
-    #ini=coords_inicio[0]*100+coords_inicio[1]
-    #objetivo=coords_llegada[0]*100+coords_llegada[1]
-    #grafo=Graph(100,100)
-    #grafo.eliminar_nodos()
-    #grafo.print_grafo()
-    #grafo.hill_climbing(10000,ini,objetivo)
