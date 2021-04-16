@@ -29,3 +29,9 @@
 ## Introducción
 
 ## Resultados
+Para A* con 100x100 desde (0,0) a (99,99)
+![Alt text](https://github.com/rafaelcanoguitton/Inteligencia-Artificial/blob/master/Lab_01/Imagenes/A_star_.png)
+Para Hill-Climbing con 100x100 desde (3,4) a (69,40)
+![Alt text](https://github.com/rafaelcanoguitton/Inteligencia-Artificial/blob/master/Lab_01/Imagenes/Hill_Climbing.png)
+Para DFS (Búsqueda a ciegas) con 100x100 desde (0,0) a (99,99)
+![Alt text](https://github.com/rafaelcanoguitton/Inteligencia-Artificial/blob/master/Lab_01/Imagenes/DFS.png)
