@@ -32,6 +32,7 @@ class Game:
         pieza=tablerito.get_piece(row,col)
         if self.selected and piece==0 and (row,col)in self.valid_moves:
             self.tablerito.move(self.selected,row,col)
+            self.change_turn()
         else:
             return False
         return True
