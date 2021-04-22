@@ -1,5 +1,5 @@
 import pygame
-from checkers.constants import WIDTH,HEIGHT,SQUARE_SIZE
+from checkers.constants import WIDTH,HEIGHT,SQUARE_SIZE, RED
 from checkers.tablero import tablero
 from checkers.juego import Game
 FPS=60
@@ -24,8 +24,7 @@ def main():
             if event.type==pygame.MOUSEBUTTONDOWN:
                 pos=pygame.mouse.get_pos()
                 row,col=get_row_col_from_mouse(pos)
-                pieza=tablerito.get_piece(row,col)
-                tablerito.move(pieza,4,3)
+                juego.select(row,col)
         juego.update()
     pygame.quit()
 main()
