@@ -1,8 +1,8 @@
 # Assets: https://techwithtim.net/wp-content/uploads/2020/09/assets.zip
 import pygame
-from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, WHITE
+from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, BLACK, WHITE
 from checkers.game import Game
-from checkers.minmax import minimax
+from checkers.minmax import minimax,get_all_moves
 
 FPS = 60
 
@@ -24,7 +24,7 @@ def main():
     if inputsito=='blanco':
         game.turn=WHITE
     else:
-        game.turn=RED
+        game.turn=BLACK
     profundidad_arbol=input('¿Qué profundidad tendrá el arbol del algoritmo MINMAX?(Dificultad) ')
     while run:
         clock.tick(FPS)
@@ -32,6 +32,12 @@ def main():
         if game.turn == WHITE:
             value, new_board = minimax(game.get_board(), int(profundidad_arbol), WHITE, game)
             game.ai_move(new_board)
+            if(len(get_all_moves(game.get_board(),WHITE,game))==0):
+                game.get_board().white_left=0
+
+        if game.turn == BLACK:
+            if(len(get_all_moves(game.get_board(),BLACK,game))==0):
+                game.get_board().red_left=0
 
         if game.winner() != None:
             color=game.winner()
