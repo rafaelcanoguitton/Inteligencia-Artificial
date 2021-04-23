@@ -29,4 +29,4 @@ R̶e̶a̶l̶i̶z̶a̶r̶ ̶p̶r̶u̶e̶b̶a̶s̶
 
 
 ## Resultados
-
+![Alt text](https://github.com/rafaelcanoguitton/Inteligencia-Artificial/blob/master/Lab_02/assets/results.png)
