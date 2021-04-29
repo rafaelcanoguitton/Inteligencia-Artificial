@@ -216,7 +216,7 @@ class Graph():
             pos=nx.get_node_attributes(self.G,'coords')
             plt.figure(num=None, figsize=(20, 20), dpi=80)
             plt.axis('off')
-            nx.draw(self.G,pos,node_size=16, node_color = color_map)
+            nx.draw(self.G,pos,node_size=16, node_color = color_map)#MARKED
             edges=self.G.edges()
             colors=[self.G[u][v]['color']for u,v in edges]
             nx.draw_networkx_edges(self.G,pos=self.coordinates,edge_color=colors)

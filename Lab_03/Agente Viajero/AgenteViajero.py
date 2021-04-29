@@ -1,4 +1,7 @@
-import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt
+import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt, networkx as nx
+
+firstEverRoute=[]
+oneOfLastRoutes=[]
 class City:
     def __init__(self, x, y):
         self.x = x
@@ -38,12 +41,15 @@ class Fitness:
         return self.fitness
 def createRoute(cityList):
     route = random.sample(cityList, len(cityList))
+    #print("Rutita: ",route)
     return route
 def initialPopulation(popSize, cityList):
     population = []
 
     for i in range(0, popSize):
         population.append(createRoute(cityList))
+    global firstEverRoute
+    firstEverRoute=population[popSize-1]
     return population
 def rankRoutes(population):
     fitnessResults = {}
@@ -134,13 +140,36 @@ def geneticAlgorithmPlot(population, popSize, eliteSize, mutationRate, generatio
     for i in range(0, generations):
         pop = nextGeneration(pop, eliteSize, mutationRate)
         progress.append(1 / rankRoutes(pop)[0][1])
-    
+    print(progress[0])
+    plt.figure()
     plt.plot(progress)
     plt.ylabel('Distance')
     plt.xlabel('Generation')
-    plt.show()
 cityList = []
-
+G = nx.Graph()
 for i in range(0,25):
     cityList.append(City(x=int(random.random() * 200), y=int(random.random() * 200)))
 geneticAlgorithmPlot(population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
+G.add_nodes_from(cityList)
+edge_colors=[]
+positions=[]
+for i in range(0,25):
+    x=cityList[i].x
+    print("equis ",x,"data es ",type(x))
+    y=cityList[i].y
+    positions.append((x,y))
+for i in range(0,25):
+    for j in range(0,25):
+        a=firstEverRoute.index(cityList[i])
+        b=firstEverRoute.index(cityList[j])
+        if(a-b==1 or a-b==-1):
+            edge_colors.append('r')
+            G.add_edge(cityList[i],cityList[j])
+        else:
+            edge_colors.append('b')
+            G.add_edge(cityList[i],cityList[j])
+        
+weights = nx.get_edge_attributes(G,'weight').values()
+plt.figure(2)
+nx.draw(G,edge_color=edge_colors)
+plt.show()
