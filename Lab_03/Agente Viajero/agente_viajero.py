@@ -192,16 +192,10 @@ G.add_nodes_from(cityList)
 bestRoute = GA(population=cityList, popSize=80, eliteSize=20, mutationRate=0.01, generations=200)
 bestRoute.append(bestRoute[0])
 
-#for i in range(0,nroCities):
-#    for j in range(0,nroCities):
-#        a=firstEverRoute.index(cityList[i])
-#        b=firstEverRoute.index(cityList[j])
-#        if(a-b==1 or a-b==-1):
-#            edge_colors.append('r')
-#            G.add_edge(cityList[i],cityList[j])
-#        else:
-#            edge_colors.append('b')
-#            G.add_edge(cityList[i],cityList[j])
+for i in range(0,nroCities):
+    for j in range(0,nroCities):
+        edge_colors.append('b')
+        G.add_edge(cityList[i],cityList[j])
         
 weights = nx.get_edge_attributes(G,'weight').values()
 plt.figure(2)
