@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import math
 
-firstEverRoute=[]
-oneOfLastRoutes=[]
-
 class City:
     def __init__(self, x, y):
         self.x = x
@@ -42,10 +39,10 @@ class Fitness:
                 pathDistance += fromCity.distance(toCity)
             self.distance = pathDistance
         return self.distance
-    
+
     def routeFitness(self):
         if self.fitness == 0:
-            self.fitness = 1 / float(self.routeDistance())
+            self.fitness = 1/float(self.routeDistance())
         return self.fitness
 
 def createRoute(cityList):
@@ -55,7 +52,6 @@ def createRoute(cityList):
 
 def initialPopulation(popSize, cityList):
     population = []
-
     for i in range(0, popSize):
         population.append(createRoute(cityList))
     global firstEverRoute
@@ -73,7 +69,6 @@ def selection(popRanked, eliteSize):
     df = pd.DataFrame(np.array(popRanked), columns=["Idx","Fitness"])
     df['cum_sum'] = df.Fitness.cumsum()
     df['cum_perc'] = 100*df.cum_sum/df.Fitness.sum()
-    
     for i in range(0, eliteSize):
         selectionResults.append(popRanked[i][0])
     for i in range(0, len(popRanked) - eliteSize):
@@ -95,18 +90,13 @@ def crossing(parent1, parent2):
     child = []
     childP1 = []
     childP2 = []
-    
-    geneA = int(random.random() * len(parent1))
-    geneB = int(random.random() * len(parent1))
-    
-    startGene = min(geneA, geneB)
-    endGene = max(geneA, geneB)
-
-    for i in range(startGene, endGene):
+    partA = int(random.random() * len(parent1))
+    partB = int(random.random() * len(parent1))
+    ini = min(partA, partB)
+    end = max(partA, partB)
+    for i in range(ini, end):
         childP1.append(parent1[i])
-        
     childP2 = [item for item in parent2 if item not in childP1]
-
     child = childP1 + childP2
     return child
 
@@ -114,30 +104,25 @@ def crossingPopulation(matingpool, eliteSize):
     children = []
     length = len(matingpool) - eliteSize
     pool = random.sample(matingpool, len(matingpool))
-
     for i in range(0,eliteSize):
         children.append(matingpool[i])
-    
     for i in range(0, length):
         child = crossing(pool[i], pool[len(matingpool)-i-1])
         children.append(child)
     return children
 
 def mutate(individual, mutationRate):
-    for swapped in range(len(individual)):
+    for aux1 in range(len(individual)):
         if(random.random() < mutationRate):
-            swapWith = int(random.random() * len(individual))
-            
-            city1 = individual[swapped]
-            city2 = individual[swapWith]
-            
-            individual[swapped] = city2
-            individual[swapWith] = city1
+            aux2 = int(random.random() * len(individual))
+            c1 = individual[aux1]
+            c2 = individual[aux2]
+            individual[aux1] = c2
+            individual[aux2] = c1
     return individual
 
 def mutatePopulation(population, mutationRate):
     mutatedPop = []
-    
     for ind in range(0, len(population)):
         mutatedInd = mutate(population[ind], mutationRate)
         mutatedPop.append(mutatedInd)
@@ -157,22 +142,18 @@ def GA(population, popSize, eliteSize, mutationRate, generations):
     bestRoute=[]
     best_distance= math.inf
     progress.append(1 / routeRanking(pop)[0][1])
-    
     for i in range(0, generations):
         pop = nextGeneration(pop, eliteSize, mutationRate)
         actual_best_distance = 1 / routeRanking(pop)[0][1]
         progress.append(actual_best_distance)
         if(best_distance == math.inf or actual_best_distance<best_distance):
             bestRoute = pop[routeRanking(pop)[0][0]]
-        
     #print(progress[0])
     plt.figure()
     plt.plot(progress)
     plt.ylabel('Distancia')
     plt.xlabel('Generacion')
-
-    bestRoute = pop[routeRanking(pop)[0][0]]
-
+    #bestRoute = pop[routeRanking(pop)[0][0]]
     return bestRoute
 
 ########################################## main ################################################################
@@ -189,7 +170,7 @@ for i in range(0,nroCities):
     positions.append((x,y))
 
 G.add_nodes_from(cityList)
-bestRoute = GA(population=cityList, popSize=80, eliteSize=20, mutationRate=0.01, generations=200)
+bestRoute = GA(population=cityList, popSize=80, eliteSize=20, mutationRate=0.10, generations=500)
 bestRoute.append(bestRoute[0])
 
 for i in range(0,nroCities):
