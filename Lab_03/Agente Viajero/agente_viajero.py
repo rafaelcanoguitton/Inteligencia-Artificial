@@ -4,6 +4,7 @@ import operator
 import pandas as pd
 import matplotlib.pyplot as plt
 import networkx as nx
+import math
 
 firstEverRoute=[]
 oneOfLastRoutes=[]
@@ -153,12 +154,17 @@ def nextGeneration(currentGen, eliteSize, mutationRate):
 def GA(population, popSize, eliteSize, mutationRate, generations):
     pop = initialPopulation(popSize, population)
     progress = []
+    bestRoute=[]
+    best_distance= math.inf
     progress.append(1 / routeRanking(pop)[0][1])
     
     for i in range(0, generations):
         pop = nextGeneration(pop, eliteSize, mutationRate)
-        progress.append(1 / routeRanking(pop)[0][1])
-    
+        actual_best_distance = 1 / routeRanking(pop)[0][1]
+        progress.append(actual_best_distance)
+        if(best_distance == math.inf or actual_best_distance<best_distance):
+            bestRoute = pop[routeRanking(pop)[0][0]]
+        
     #print(progress[0])
     plt.figure()
     plt.plot(progress)
@@ -166,38 +172,45 @@ def GA(population, popSize, eliteSize, mutationRate, generations):
     plt.xlabel('Generacion')
 
     bestRoute = pop[routeRanking(pop)[0][0]]
+
     return bestRoute
 
 ########################################## main ################################################################
 cityList = []
 edge_colors=[]
 positions=[]
+nroCities=20
 
 G = nx.Graph()
-for i in range(0,20):
+for i in range(0,nroCities):
     cityList.append(City(x=int(random.random() * 200), y=int(random.random() * 200)))
-    positions.append((cityList[i].x,cityList[i].y))
-bestRoute = GA(population=cityList, popSize=50, eliteSize=10, mutationRate=0.01, generations=250)
+    x=cityList[i].x
+    y=cityList[i].y
+    positions.append((x,y))
+
 G.add_nodes_from(cityList)
+bestRoute = GA(population=cityList, popSize=80, eliteSize=20, mutationRate=0.01, generations=200)
+bestRoute.append(bestRoute[0])
 
-#for i in range(0,20):
-#    x=cityList[i].x
-#    y=cityList[i].y
-#    print("City",i,": (",x,",",y,")")
-#    positions.append((x,y))
-
-for i in range(0,20):
-    for j in range(0,20):
-        a=firstEverRoute.index(cityList[i])
-        b=firstEverRoute.index(cityList[j])
-        if(a-b==1 or a-b==-1):
-            edge_colors.append('r')
-            G.add_edge(cityList[i],cityList[j])
-        else:
-            edge_colors.append('b')
-            G.add_edge(cityList[i],cityList[j])
+#for i in range(0,nroCities):
+#    for j in range(0,nroCities):
+#        a=firstEverRoute.index(cityList[i])
+#        b=firstEverRoute.index(cityList[j])
+#        if(a-b==1 or a-b==-1):
+#            edge_colors.append('r')
+#            G.add_edge(cityList[i],cityList[j])
+#        else:
+#            edge_colors.append('b')
+#            G.add_edge(cityList[i],cityList[j])
         
 weights = nx.get_edge_attributes(G,'weight').values()
 plt.figure(2)
 nx.draw(G,edge_color=edge_colors)
 plt.show()
+
+for i in range(0,nroCities):
+    x=bestRoute[i].x
+    y=bestRoute[i].y
+    x_2=bestRoute[i+1].x
+    y_2=bestRoute[i+1].y
+    print("Route: (",x,",",y,")->(",x_2,",",y_2,")")
