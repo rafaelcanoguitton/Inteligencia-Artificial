@@ -11,7 +11,7 @@
 - Instalar todos los paquetes/librerías requeridos:
   
   - math
-  - networkx
+  - networkxk
 
 `py -3 -m pip install -r librerias.txt`
 
